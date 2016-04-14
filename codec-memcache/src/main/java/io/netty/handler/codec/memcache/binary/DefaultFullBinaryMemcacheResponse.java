@@ -115,4 +115,26 @@ public class DefaultFullBinaryMemcacheResponse extends DefaultBinaryMemcacheResp
         }
         return new DefaultFullBinaryMemcacheResponse(key, extras, content().duplicate());
     }
+
+    @Override
+    public FullBinaryMemcacheResponse retainedDuplicate() {
+        return replace0(content().retainedDuplicate());
+    }
+
+    @Override
+    public FullBinaryMemcacheResponse replace(ByteBuf content) {
+        return replace0(content);
+    }
+
+    private FullBinaryMemcacheResponse replace0(ByteBuf content) {
+        ByteBuf key = key();
+        if (key != null) {
+            key = key.retainedDuplicate();
+        }
+        ByteBuf extras = extras();
+        if (extras != null) {
+            extras = extras.retainedDuplicate();
+        }
+        return new DefaultFullBinaryMemcacheResponse(key, extras, content);
+    }
 }
